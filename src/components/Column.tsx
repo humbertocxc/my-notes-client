@@ -1,9 +1,39 @@
 import { List, ListSubheader } from "@mui/material"
-import { Column as IColumn } from "../../utils/todo"
 import Card from "./Card"
+import { gql, useQuery } from "@apollo/client";
 
+interface ColumnProps {
+  title: string
+}
 
-function Column({ tasks, title }: IColumn) {
+interface TaskListItem {
+  id: string
+  title: string
+}
+
+interface TaskStatusList {
+  tasksByStatus: TaskListItem[]
+}
+
+function Column({ title }: ColumnProps) {
+  const GET_TASKS = gql`
+    query {
+      tasksByStatus(taskStatusUniqueInput: { name: "${title}"}) {
+        id
+        title
+      }
+    }
+  `;
+  const { loading, error, data } = useQuery<TaskStatusList>(GET_TASKS);
+
+  if (loading) return <p>Loading...</p>;
+
+  if (error) {
+    console.log(error.message)
+    return <p>Error fetching data</p>
+  }
+
+  console.log(data)
 
   return (
     <List
@@ -18,8 +48,8 @@ function Column({ tasks, title }: IColumn) {
         </ListSubheader>
       }
     >
-      {tasks.map(task =>
-        <Card task={task} key={task.id} />
+      {data?.tasksByStatus.map(task =>
+        <Card key={task.id} task={task} />
       )}
     </List>
   )

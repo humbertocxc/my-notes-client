@@ -1,6 +1,9 @@
-import { Box, Checkbox, Typography } from "@mui/material"
-import { Task } from "../../utils/todo"
+import { Box, Typography } from "@mui/material"
 
+interface Task {
+  id: string
+  title: string
+}
 
 interface ICard {
   task: Task
@@ -13,7 +16,6 @@ function Card({ task }: ICard) {
       display: 'flex', justifyContent: 'space-between', alignItems: 'center'
     }}>
       <Typography p={1}>{task.title}</Typography>
-      <Checkbox checked={task.done} />
     </Box>
   )
 }
