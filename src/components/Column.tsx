@@ -1,9 +1,10 @@
-import { List, ListSubheader } from "@mui/material"
-import Card from "./Card"
+import { Button, List, ListSubheader, Typography } from "@mui/material"
+import Card, { Status } from "./Card"
 import { gql, useQuery } from "@apollo/client";
+import { AddCircle } from "@mui/icons-material";
 
 interface ColumnProps {
-  title: string
+  title: Status
 }
 
 interface TaskListItem {
@@ -33,23 +34,30 @@ function Column({ title }: ColumnProps) {
     return <p>Error fetching data</p>
   }
 
-  console.log(data)
-
   return (
     <List
       sx={{
-        width: '100%', maxWidth: 540, border: 1, borderColor: 'divider', borderRadius: 3, padding: 1
+        width: '100%', maxWidth: 540, border: 1, borderColor: 'divider', borderRadius: 3, p: 1.5
       }}
       component="nav"
       aria-labelledby="nested-list-subheader"
       subheader={
-        <ListSubheader component="div" id="nested-list-subheader">
-          {title}
+        <ListSubheader
+          component="div"
+          id="nested-list-subheader"
+          sx={{ display: 'flex', justifyContent: 'space-between', pt: 2, color: 'black' }}
+        >
+          <Typography variant="h3" sx={{ fontSize: '1.5em', pl: 0.5 }} >
+            {title}
+          </Typography>
+          <Button>
+            <AddCircle sx={{ color: 'divider' }} />
+          </Button>
         </ListSubheader>
       }
     >
       {data?.tasksByStatus.map(task =>
-        <Card key={task.id} task={task} />
+        <Card key={task.id} {...task} status={title} />
       )}
     </List>
   )
