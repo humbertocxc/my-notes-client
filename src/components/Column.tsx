@@ -1,51 +1,17 @@
 import { Button, List, ListSubheader, Typography } from "@mui/material"
-import Card, { Status } from "./Card"
-import { gql, useMutation, useQuery } from "@apollo/client";
+import Card from "./Card"
 import { AddCircle } from "@mui/icons-material";
+import useTaskMutations from "../hooks/useTaskMutations";
+import useTaskQueries from "../hooks/useTaskQueries";
 
 interface ColumnProps {
   name: string
   id: string
 }
 
-interface TaskListItem {
-  id: string
-  title: string
-  status: Status
-}
-
-interface TaskColumnList {
-  tasksByColumn: TaskListItem[]
-}
-
 function Column({ name, id }: ColumnProps) {
-  const GET_TASKS = gql`
-    query {
-      tasksByColumn(columnUniqueInput: { id: "${id}"}) {
-        id
-        status
-        title
-      }
-    }
-  `;
-
-  const CREATE_TASK = gql`
-    mutation {
-      createTask(data: { title: "test create", description: "test", columnId: "${id}" }) {
-        id
-        title
-        description
-      }
-    }
-  `
-
-  const { loading, error, data, refetch } = useQuery<TaskColumnList>(GET_TASKS);
-  const [createTask ] = useMutation(CREATE_TASK)
-
-  const createNewTask = async () => {
-    await createTask()
-    refetch()
-  }
+  const { error, loading, refetch, taskList } = useTaskQueries({ columnId: id })
+  const { createNewTask } = useTaskMutations({ columnId: id, refetch })
 
   if (loading) return <p>Loading...</p>;
 
@@ -80,7 +46,7 @@ function Column({ name, id }: ColumnProps) {
         </ListSubheader>
       }
     >
-      {data?.tasksByColumn.map(task =>
+      {taskList?.tasksByColumn.map(task =>
         <Card key={task.id} {...task} status={task.status} refetch={handleRefetch} />
       )}
     </List>

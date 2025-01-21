@@ -1,25 +1,10 @@
 import { Container, Stack } from '@mui/material'
 import Column from './Column'
-import { gql, useQuery } from '@apollo/client';
+import useColumnQueries from '../hooks/useColumnQueries';
 
-interface IColumn {
-  allColumns: {
-    name: string
-    id: string
-  }[]
-}
-
-const GET_COLUMNS = gql`
-  query {
-    allColumns {
-      id
-      name
-    }
-  }
-`;
 
 function Board() {
-  const { loading, error, data } = useQuery<IColumn>(GET_COLUMNS);
+  const { loading, error, data } = useColumnQueries()
 
   if (loading) return <p>Loading...</p>;
 

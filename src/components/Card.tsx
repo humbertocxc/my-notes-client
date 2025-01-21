@@ -1,45 +1,17 @@
 import { Box, Button, Checkbox, Typography } from "@mui/material"
-import { gql, useMutation } from "@apollo/client";
 import { Delete } from "@mui/icons-material";
+import { Status } from "../../lib/types";
+import useTaskMutations from "../hooks/useTaskMutations";
 
-export type Status = 'todo' | 'in_progress' | 'done'
-
-export interface TaskCardProps {
+export interface CardProps {
   id: string
   title: string
   status: Status
   refetch: () => void
 }
 
-function Card({ title, status, id, refetch }: TaskCardProps) {
-  const newStatus = status === 'done' ? 'todo' : 'done'
-  const UPDATE_TASK_STATUS = gql`
-    mutation {
-      updateTaskStatus ( id: "${id}", status: "${newStatus}" ) {
-        status
-      }
-    }
-  `
-  const DELETE_TASK = gql`
-    mutation {
-      deleteTask ( id: "${id}" ) {
-        id
-      }
-    }
-  `
-
-  const [ updateTaskStatus ] = useMutation(UPDATE_TASK_STATUS)
-  const [ deleteTask ] = useMutation(DELETE_TASK)
-
-  const changeStatus = async () => {
-    await updateTaskStatus()
-    refetch()
-  }
-
-  const deleteTaskById = async () => {
-    await deleteTask()
-    refetch()
-  }
+function Card({ title, status, id, refetch }: CardProps) {
+  const { changeStatus, deleteTaskById } = useTaskMutations({ id, status, refetch })
 
   return (
     <Box sx={{
