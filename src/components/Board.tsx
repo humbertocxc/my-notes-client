@@ -3,12 +3,16 @@ import Column from './Column'
 import { gql, useQuery } from '@apollo/client';
 
 interface IColumn {
-  allTaskStatuses: { name: string }[]
+  allColumns: {
+    name: string
+    id: string
+  }[]
 }
 
 const GET_COLUMNS = gql`
   query {
-    allTaskStatuses {
+    allColumns {
+      id
       name
     }
   }
@@ -27,8 +31,8 @@ function Board() {
   return (
     <Container>
       <Stack direction="row" spacing={10}>
-        {data?.allTaskStatuses.map(status => (
-          <Column key={status.name} title={status.name} />
+        {data?.allColumns.map(column => (
+          <Column key={column.id} name={column.name} id={column.id} />
         ))}
       </Stack>
     </Container>
