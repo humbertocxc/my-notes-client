@@ -1,7 +1,9 @@
 import { Box, Button, Checkbox, Typography } from "@mui/material"
 import { Delete } from "@mui/icons-material";
-import { Status } from "../../lib/types";
-import useTaskMutations from "../hooks/useTaskMutations";
+import { Status } from "../typedefs/task/types";
+import { useMutation } from "@apollo/client";
+import { changeTaskInfoMutation, UpdatedTaskInfo } from "../typedefs/task/changeTaskInfo";
+import { DeletedTaskInfo, deleteTaskMutation } from "../typedefs/task/deleteTask";
 
 export interface CardProps {
   id: string
@@ -11,7 +13,20 @@ export interface CardProps {
 }
 
 function Card({ title, status, id, refetch }: CardProps) {
-  const { changeStatus, deleteTaskById } = useTaskMutations({ id, status, refetch })
+  const newStatus = status === 'done' ? 'todo' : 'done'
+
+  const [ changeStatus ] = useMutation<UpdatedTaskInfo>(changeTaskInfoMutation({ id, status: newStatus }))
+  const [ deleteStatus ] = useMutation<DeletedTaskInfo>(deleteTaskMutation({ id }))
+
+  const handleChangeStatus = () => {
+    changeStatus()
+    refetch()
+  }
+
+  const handleDeleteTask = () => {
+    deleteStatus()
+    refetch()
+  }
 
   return (
     <Box sx={{
@@ -19,10 +34,10 @@ function Card({ title, status, id, refetch }: CardProps) {
       display: 'flex', justifyContent: 'space-between', alignItems: 'center'
     }}>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <Checkbox checked={status === 'done'} onChange={changeStatus} />
+        <Checkbox checked={status === 'done'} onChange={handleChangeStatus} />
         <Typography p={1}>{title}</Typography>
       </Box>
-      <Button onClick={deleteTaskById}>
+      <Button onClick={handleDeleteTask}>
         <Delete />
       </Button>
     </Box>

@@ -1,17 +1,23 @@
 import { Button, List, ListSubheader, Typography } from "@mui/material"
 import Card from "./Card"
 import { AddCircle } from "@mui/icons-material";
-import useTaskMutations from "../hooks/useTaskMutations";
-import useTaskQueries from "../hooks/useTaskQueries";
+import { useMutation, useQuery } from "@apollo/client";
+import { columnDetailsQuery, IColumnDetails } from "../typedefs/column/columnDetails";
+import { CreatedTask, createTaskMutation } from "../typedefs/task/createTask";
 
 interface ColumnProps {
   name: string
-  id: string
+  columnId: string
 }
 
-function Column({ name, id }: ColumnProps) {
-  const { error, loading, refetch, taskList } = useTaskQueries({ columnId: id })
-  const { createNewTask } = useTaskMutations({ columnId: id, refetch })
+function Column({ name, columnId }: ColumnProps) {
+  const { data, refetch, error, loading } = useQuery<IColumnDetails>(columnDetailsQuery({ id: columnId }))
+  const [ createTask ] = useMutation<CreatedTask>(createTaskMutation({ columnId, title: 'teste' }))
+
+  const handleCreateTask = () => {
+    createTask()
+    refetch()
+  }
 
   if (loading) return <p>Loading...</p>;
 
@@ -20,9 +26,7 @@ function Column({ name, id }: ColumnProps) {
     return <p>Error fetching data</p>
   }
 
-  const handleRefetch = () => {
-    refetch()
-  }
+  const handleRefetch = () => refetch()
 
   return (
     <List
@@ -40,13 +44,13 @@ function Column({ name, id }: ColumnProps) {
           <Typography variant="h3" sx={{ fontSize: '1.5em', pl: 0.5 }} >
             {name}
           </Typography>
-          <Button onClick={createNewTask}>
+          <Button onClick={handleCreateTask}>
             <AddCircle sx={{ color: 'primary' }} />
           </Button>
         </ListSubheader>
       }
     >
-      {taskList?.tasksByColumn.map(task =>
+      {data?.columnById.tasks.map(task =>
         <Card key={task.id} {...task} status={task.status} refetch={handleRefetch} />
       )}
     </List>
