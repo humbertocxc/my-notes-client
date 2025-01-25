@@ -2,14 +2,10 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client';
 import theme from './theme';
 import App from './App';
-
-const client = new ApolloClient({
-  uri: 'http://localhost:4000',
-  cache: new InMemoryCache(),
-});
+import client from '../lib/client'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
