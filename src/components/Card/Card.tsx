@@ -2,9 +2,9 @@ import { Box, Button, Checkbox, Typography } from "@mui/material"
 import { Delete } from "@mui/icons-material";
 import { useMutation } from "@apollo/client";
 import { Draggable } from "@hello-pangea/dnd";
-import { Status } from "../typedefs/task/types";
-import { changeTaskInfoMutation, IChangeTaskInfo } from "../typedefs/task/changeTaskInfo";
-import { deleteTaskMutation, IDeleteTask } from "../typedefs/task/deleteTask";
+import { Status } from "../../typedefs/task/types";
+import { changeTaskInfoMutation, IChangeTaskInfo } from "../../typedefs/task/changeTaskInfo";
+import { deleteTaskMutation, IDeleteTask } from "../../typedefs/task/deleteTask";
 
 export interface CardProps {
   id: string
