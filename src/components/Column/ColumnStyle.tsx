@@ -1,30 +1,16 @@
 import { List, ListSubheader, Typography } from "@mui/material"
 import { forwardRef, ReactNode } from "react"
+import { headerStyle, listStyle } from "./styles"
 
 interface IColumnStyle {
   name?: string
   children: ReactNode
 }
 
-const style = {
-  width: '100%',
-  maxWidth: 300,
-  border: 1,
-  bgcolor: 'common.white',
-  borderColor: 'divider',
-  borderRadius: 3,
-  p: 1.5
-}
-
-const headerStyle = {
-  display: 'flex', justifyContent: 'space-between', py: 2, bgcolor: 'transparent', color: 'black'
-}
-
-
 const ColumnStyle = forwardRef<HTMLUListElement, IColumnStyle>(({ name, children }, ref) => {
   return (
     <List
-      sx={style}
+      sx={listStyle}
       component="nav"
       aria-labelledby="nested-list-subheader"
       subheader={
