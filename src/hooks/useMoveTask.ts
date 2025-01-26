@@ -10,8 +10,8 @@ export const useMoveTask = () => {
     }
   );
 
-  const handleMoveTask = (moveData: IMoveTask) => {
-    moveTask({ variables: moveData });
+  const handleMoveTask = async (moveData: IMoveTask) => {
+    await moveTask({ variables: moveData });
   };
 
   return handleMoveTask;

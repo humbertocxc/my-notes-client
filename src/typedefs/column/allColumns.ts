@@ -6,6 +6,7 @@ export const allColumnsQuery = gql`
     allColumns {
       id
       name
+      size
     }
   }
 `;
@@ -14,5 +15,6 @@ export interface IColumnList {
   allColumns: {
     name: string
     id: string
+    size: number
   }[]
 }

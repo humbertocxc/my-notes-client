@@ -1,10 +1,10 @@
 import { DragDropContext, OnDragEndResponder } from '@hello-pangea/dnd'
 import { Container, Stack } from '@mui/material'
 import { useQuery } from '@apollo/client';
-import Column from './Column'
-import { allColumnsQuery, IColumnList } from '../typedefs/column/allColumns';
-import { IMoveTask } from '../typedefs/task/moveTask';
-import { useMoveTask } from '../hooks/useMoveTask';
+import Column from '../Column/Column'
+import { allColumnsQuery, IColumnList } from '../../typedefs/column/allColumns';
+import { IMoveTask } from '../../typedefs/task/moveTask';
+import { useMoveTask } from '../../hooks/useMoveTask';
 
 
 function Board() {
@@ -18,14 +18,14 @@ function Board() {
     return <p>Error fetching data</p>
   }
 
-  const onDragEnd: OnDragEndResponder = (result) => {
+  const onDragEnd: OnDragEndResponder = async (result) => {
     const moveData: IMoveTask = {
       id: result.draggableId,
       destinationId: result.destination?.droppableId!,
       position: result.destination?.index!
     }
 
-    moveTask(moveData)
+    await moveTask(moveData)
   }
 
   return (
@@ -36,6 +36,7 @@ function Board() {
             <Column
               key={column.id}
               name={column.name}
+              size={column.size}
               id={column.id}
             />
           ))}
