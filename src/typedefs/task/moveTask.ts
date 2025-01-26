@@ -9,18 +9,15 @@ export interface IMoveTask {
 export const moveTaskMutation = gql`
   mutation MoveTask($id: String!, $destinationId: String!, $position: Int!) {
     updateTaskPosition(data: { id: $id, destinationId: $destinationId, position: $position }) {
-      id
-      title
-      position
-      columnId
+      originId
+      destinationId
     }
   }
 `;
 
 export interface MovedTask {
-  id: string;
-  title: string;
-  position: number;
-  columnId: string;
+  updateTaskPosition?: {
+    originId?: string
+    destinationId?: string
+  }
 }
-

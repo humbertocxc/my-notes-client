@@ -6,12 +6,26 @@ export const useMoveTask = () => {
   const [moveTask] = useMutation<MovedTask>(
     moveTaskMutation,
     {
-      refetchQueries: [columnDetailsQuery],
+      refetchQueries: ({ data }) => {
+        if (!data || !data.updateTaskPosition) return [];
+
+        const { destinationId, originId } = data.updateTaskPosition;
+        const refetches = []
+
+        if (destinationId) {
+          refetches.push({ query: columnDetailsQuery, variables: { id: destinationId } })
+        }
+        if (originId) {
+          refetches.push({ query: columnDetailsQuery, variables: { id: originId } })
+        }
+
+        return refetches
+      },
     }
   );
 
-  const handleMoveTask = async (moveData: IMoveTask) => {
-    await moveTask({ variables: moveData });
+  const handleMoveTask = async (moveData: IMoveTask, handleError: VoidFunction) => {
+    await moveTask({ variables: moveData, onError: handleError });
   };
 
   return handleMoveTask;

@@ -23,14 +23,18 @@ function Board() {
   }
 
   const onDragEnd: OnDragEndResponder = async (result) => {
+    if (!result || !result.destination) return
+
     const moveData: IMoveTask = {
       id: result.draggableId,
-      destinationId: result.destination?.droppableId!,
-      position: result.destination?.index!
+      destinationId: result.destination.droppableId,
+      position: result.destination.index
     }
 
+    const handleError = () => setMovingTask(false)
+
     setMovingTask(true)
-    await moveTask(moveData)
+    await moveTask(moveData, handleError)
     setMovingTask(false)
   }
 
