@@ -1,18 +1,15 @@
-import { Box, Button, Container, Stack } from '@mui/material'
-import Column from './Column'
-import { useState } from 'react';
-import { AddCircle } from '@mui/icons-material';
-import CustomModal from './CustomModal';
+import { DragDropContext, OnDragEndResponder } from 'react-beautiful-dnd'
+import { Container, Stack } from '@mui/material'
 import { useQuery } from '@apollo/client';
+import Column from './Column'
 import { allColumnsQuery, IColumnList } from '../typedefs/column/allColumns';
+import { IMoveTask } from '../typedefs/task/moveTask';
+import { useMoveTask } from '../hooks/useMoveTask';
 
 
 function Board() {
-  const { error, loading, data } = useQuery<IColumnList>(allColumnsQuery())
-
-  const [openModal, setOpenModal] = useState(false);
-  const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
+  const { error, loading, data } = useQuery<IColumnList>(allColumnsQuery)
+  const moveTask = useMoveTask()
 
   if (loading) return <p>Loading...</p>;
 
@@ -21,21 +18,29 @@ function Board() {
     return <p>Error fetching data</p>
   }
 
+  const onDragEnd: OnDragEndResponder = (result) => {
+    const moveData: IMoveTask = {
+      id: result.draggableId,
+      destinationId: result.destination?.droppableId!,
+      position: result.destination?.index!
+    }
+
+    moveTask(moveData)
+  }
+
   return (
     <Container>
-      <Stack direction="row" spacing={10}>
-        {data?.allColumns.map(column => (
-          <Column key={column.id} name={column.name} columnId={column.id} />
-        ))}
-        <Box>
-          <Button sx={{ borderRadius: '100%', p: 2 }} onClick={handleOpenModal}>
-            <AddCircle fontSize='large' />
-          </Button>
-        </Box>
-        <CustomModal handleClose={handleCloseModal} open={openModal} >
-          <p>teste</p>
-        </CustomModal>
-      </Stack>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Stack direction="row" spacing={10}>
+          {data?.allColumns.map(column => (
+            <Column
+              key={column.id}
+              name={column.name}
+              id={column.id}
+            />
+          ))}
+        </Stack>
+      </DragDropContext>
     </Container>
   )
 }

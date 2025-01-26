@@ -3,29 +3,26 @@ import { TaskColumnInfo } from './taskDetails';
 import { Status } from './types';
 
 
-interface ICreateTask {
+export interface ICreateTask {
   title: string
   columnId: string
 }
 
-export const createTaskMutation = ({ title, columnId }: ICreateTask) => {
-  const mutation = gql`
-    mutation {
-      createTask(data: { title: "${title}", columnId: "${columnId}" }) {
+export const createTaskMutation = gql`
+  mutation($title: String!, $columnId: String!) {
+    createTask(data: { title: $title, columnId: $columnId }) {
+      id
+      title
+      status
+      position
+      column {
         id
-        title
-        status
-        position
-        column {
-          id
-          name
-        }
+        name
       }
     }
-  `
+  }
+`
 
-  return mutation
-};
 
 export interface CreatedTask {
   id: string

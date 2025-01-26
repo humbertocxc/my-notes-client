@@ -2,30 +2,26 @@ import { gql } from "@apollo/client";
 import { Status } from "./types";
 
 
-interface IUseTaskQueries {
+export interface ITaskDetailsQuerie {
   id?: string
 }
 
-export const taskDetailsQuerie = ({ id }: IUseTaskQueries) => {
-  const query = gql`
-    query {
-      taskById (id: "${id}") {
+export const taskDetailsQuerie = gql`
+  query($id: String!) {
+    taskById (id: $id) {
+      id
+      title
+      status
+      position
+      createdAt
+      updatedAt
+      column {
         id
-        title
-        status
-        position
-        createdAt
-        updatedAt
-        column {
-          id
-          name
-        }
+        name
       }
     }
-  `
-
-  return query
-}
+  }
+`
 
 export interface TaskColumnInfo {
   id: string

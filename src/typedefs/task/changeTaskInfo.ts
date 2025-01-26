@@ -1,37 +1,21 @@
 import { gql } from "@apollo/client"
 import { Status } from "./types"
 
-interface IChangeTaskInfo {
+export interface IChangeTaskInfo {
   id: string
   status?: Status
   title?: string
 }
 
-export const changeTaskInfoMutation = ({ id, status, title }: IChangeTaskInfo) => {
-  const fields = [`id: "${id}" `]
-
-  if (title !== undefined && title !== '') {
-    fields.push(`title: "${title}"`)
-  }
-
-  if (status !== undefined) {
-    fields.push(`status: "${status}"`)
-  }
-
-  const data = fields.join(", ")
-
-  const mutation = gql`
-    mutation {
-      updateTaskInfo(data: { ${data} }) {
-        id
-        title
-        status
-      }
+export const changeTaskInfoMutation = gql`
+  mutation($id: String!, $status: String, $title: String) {
+    updateTaskInfo(data: { id: $id, status: $status, title: $title }) {
+      id
+      title
+      status
     }
-  `;
-
-  return mutation
-}
+  }
+`
 
 export interface UpdatedTaskInfo {
   id: string
