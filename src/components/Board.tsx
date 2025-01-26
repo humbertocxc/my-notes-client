@@ -1,4 +1,4 @@
-import { DragDropContext, OnDragEndResponder } from 'react-beautiful-dnd'
+import { DragDropContext, OnDragEndResponder } from '@hello-pangea/dnd'
 import { Container, Stack } from '@mui/material'
 import { useQuery } from '@apollo/client';
 import Column from './Column'

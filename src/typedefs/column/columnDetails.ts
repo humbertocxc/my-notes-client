@@ -15,6 +15,7 @@ export const columnDetailsQuery = gql`
         title
         status
         position
+        columnId
       }
     }
   }
@@ -25,6 +26,9 @@ interface TaskListItem {
   title: string
   status: Status
   position: number
+  columnId?: string
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 export interface IColumnDetails {

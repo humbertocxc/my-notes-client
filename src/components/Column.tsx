@@ -1,6 +1,6 @@
 import { Button, List, ListSubheader, Typography } from "@mui/material"
 import { AddCircle } from "@mui/icons-material";
-import { Droppable } from "react-beautiful-dnd";
+import { Droppable } from "@hello-pangea/dnd";
 import { useMutation, useQuery } from "@apollo/client";
 import Card from "./Card"
 import { columnDetailsQuery, IColumnDetails } from "../typedefs/column/columnDetails";
