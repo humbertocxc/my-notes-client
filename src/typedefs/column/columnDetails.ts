@@ -1,27 +1,24 @@
 import { gql } from "@apollo/client";
 import { Status } from "../task/types";
 
-interface IColumnTypedefs {
+export interface IColumnDetailsQuery {
   id?: string
 }
 
-export const columnDetailsQuery = ({ id }: IColumnTypedefs) => {
-  const query = gql`
-    query {
-      columnById(data: { id: "${id}"}) {
+export const columnDetailsQuery = gql`
+  query($id: String!) {
+    columnById(data: { id: $id}) {
+      id
+      name
+      tasks {
         id
-        name
-        tasks {
-          id
-          title
-          status
-          position
-        }
+        title
+        status
+        position
       }
     }
-  `;
-  return query
-}
+  }
+`;
 
 interface TaskListItem {
   id: string

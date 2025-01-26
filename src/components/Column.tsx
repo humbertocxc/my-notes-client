@@ -12,7 +12,7 @@ interface ColumnProps {
 }
 
 function Column({ name, id }: ColumnProps) {
-  const { data, refetch, error, loading } = useQuery<IColumnDetails>(columnDetailsQuery({ id }))
+  const { data, refetch, error, loading } = useQuery<IColumnDetails>(columnDetailsQuery, { variables: { id } })
 
   const [createTask] = useMutation<ICreateTask>(createTaskMutation)
 
