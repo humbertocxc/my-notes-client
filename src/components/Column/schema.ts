@@ -1,11 +1,9 @@
 import { z } from "zod";
 
 const schema = z.object({
-  name: z.string().min(1, "Name cannot be empty").max(100, "Name cannot exceed 100 characters")
+  name: z.string().min(1, "Name is required"),
 });
 
-export default schema;
+export default schema
 
-export interface ColumnSchema {
-  name: string
-}
+export type FormData = z.infer<typeof schema>;
