@@ -17,19 +17,19 @@ const style = {
 };
 
 interface ITransitionModal {
-  handleClose: () => void
-  open: boolean
+  onClose: () => void
+  isOpen: boolean
   children: ReactNode
 }
 
-export default function CustomModal({ handleClose, open, children }: ITransitionModal) {
+export default function CustomModal({ onClose, isOpen, children }: ITransitionModal) {
   return (
     <div>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        open={open}
-        onClose={handleClose}
+        open={isOpen}
+        onClose={onClose}
         closeAfterTransition
         slots={{ backdrop: Backdrop }}
         slotProps={{
@@ -38,7 +38,7 @@ export default function CustomModal({ handleClose, open, children }: ITransition
           },
         }}
       >
-        <Fade in={open}>
+        <Fade in={isOpen}>
           <Box sx={style}>
             {children}
           </Box>

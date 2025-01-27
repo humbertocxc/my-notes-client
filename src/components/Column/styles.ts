@@ -1,4 +1,6 @@
-export const listStyle = {
+import { SxProps } from "@mui/material"
+
+export const listStyle: SxProps = {
   minWidth: '320px',
   maxWidth: '320px',
   minHeight: '79vh',
@@ -12,19 +14,35 @@ export const listStyle = {
   px: 1.5
 }
 
-export const headerStyle = {
+export const headerStyle: SxProps = {
   display: 'flex',
   justifyContent: 'space-between',
+  alignItems: 'center',
   pb: 2,
   pt: 3.5,
   bgcolor: 'inherit',
   color: 'black'
 }
 
-export const errorStyle = {
+export const errorStyle: SxProps = {
   display: 'flex',
   justifyContent: 'space-between',
   flexDirection: 'row',
   alignItems: 'center'
+}
+
+export const addTaskStyle: SxProps = {
+  display: 'block',
+  mx: 'auto',
+  mb: 4,
+  mt: 1,
+  borderRadius: '100%'
+}
+
+export const editColumnHeader: SxProps = { 
+  display: 'flex', 
+  alignItems: 'center', 
+  justifyContent: 'space-between', 
+  pb: 3 
 }
 

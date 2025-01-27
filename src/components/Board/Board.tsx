@@ -8,6 +8,7 @@ import { useMoveTask } from '../../hooks/useMoveTask';
 import { boardStyle } from './styles';
 import { useState } from 'react';
 import { Loading } from './Loading';
+import client from '../../../lib/client';
 
 
 function Board() {
@@ -18,18 +19,23 @@ function Board() {
   if (loading) return <Loading loading />;
 
   if (error) {
-    console.log(error.message)
     return <p>Error fetching data</p>
   }
 
   const onDragEnd: OnDragEndResponder = async (result) => {
     if (!result || !result.destination) return
 
+    const startPosition = Object.values(client.cache.extract()).find(
+      (item) => item?.id === result.draggableId
+    )?.position;
+
     const moveData: IMoveTask = {
       id: result.draggableId,
       destinationId: result.destination.droppableId,
       position: result.destination.index
     }
+
+    if (startPosition === moveData.position && moveData.destinationId === result.source.droppableId) return
 
     const handleError = () => setMovingTask(false)
 
