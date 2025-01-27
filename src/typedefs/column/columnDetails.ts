@@ -10,6 +10,7 @@ export const columnDetailsQuery = gql`
     columnById(data: { id: $id}) {
       id
       name
+      size
       tasks {
         id
         title
@@ -35,6 +36,7 @@ export interface IColumnDetails {
   columnById: {
     id: string
     name: string
+    size: number
     tasks: TaskListItem[]
   }
 }
