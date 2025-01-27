@@ -10,7 +10,7 @@ import { allColumnsQuery } from "../../typedefs/column/allColumns"
 import { useState } from "react"
 import { DeleteForever } from "@mui/icons-material"
 import CustomModal from "../CustomModal"
-import { editColumnHeader } from "./styles"
+import { editColumnForm, editColumnHeader } from "./styles"
 
 
 interface IEditColumnProps {
@@ -23,6 +23,7 @@ interface IEditColumnProps {
 
 export const EditColumnForm = ({ id, name, size, refetch, close }: IEditColumnProps) => {
   const [showDeleteAlert, setShowDeleteAlert] = useState(false)
+  const [isChanging, setIsChanging] = useState(false)
   const [renameColumn] = useMutation<IRenamedColumn>(renameColumnMutation)
   const [deleteColumn] = useMutation<IDeletedColumn>(deleteColumnMutation)
 
@@ -31,12 +32,13 @@ export const EditColumnForm = ({ id, name, size, refetch, close }: IEditColumnPr
     defaultValues: { name }
   })
 
-
   const onSubmit = async ({ name }: FormData) => {
+    setIsChanging(true)
     const data = { name, id }
     await renameColumn({ variables: data })
 
     refetch()
+    setIsChanging(false)
   }
 
   const handleShowDeleteAlert = () => setShowDeleteAlert(true)
@@ -52,13 +54,13 @@ export const EditColumnForm = ({ id, name, size, refetch, close }: IEditColumnPr
   }
 
   return (
-    <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ p: 1.5, width: '100%' }}>
+    <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={editColumnForm}>
       <Box sx={editColumnHeader}>
         <Typography variant="h4" sx={{ fontSize: '1.5em' }}>
           {`${name} (${size} tasks)`}
         </Typography>
         <Tooltip title="Delete group">
-          <Button type="button" onClick={handleShowDeleteAlert}>
+          <Button disabled={isChanging} type="button" onClick={handleShowDeleteAlert}>
             <DeleteForever color="error" />
           </Button>
         </Tooltip>
@@ -67,17 +69,28 @@ export const EditColumnForm = ({ id, name, size, refetch, close }: IEditColumnPr
       <TextField
         {...register("name")}
         defaultValue={name}
+        disabled={isChanging}
         variant="standard"
         error={!!errors.name}
         helperText={errors.name ? errors.name.message : ""}
-        sx={{ width: '100%' }}
+        sx={{ width: '100%', mb: 2 }}
       />
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        disabled={isChanging}
+        sx={{ maxWidth: '50%', mx: 'auto' }}
+      >
+        Save name
+      </Button>
 
       <CustomModal
         isOpen={showDeleteAlert}
         onClose={handleCloseDeleteAlert}
         buttonClick={handleDelete}
         buttonText="Delete"
+        disabled={isChanging}
       >
         <Typography sx={{ textAlign: 'center', pb: 3 }} color="error">
           Delete this column will delete all tasks inside!

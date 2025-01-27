@@ -28,9 +28,10 @@ interface ITransitionModal {
   buttonText?: string
   isSubmit?: boolean
   hideButton?: boolean
+  disabled?: boolean
 }
 
-export default function CustomModal({ isSubmit, onClose, isOpen, children, buttonText, buttonClick, hideButton }: ITransitionModal) {
+export default function CustomModal({ isSubmit, onClose, isOpen, children, buttonText, buttonClick, hideButton, disabled }: ITransitionModal) {
   return (
     <div>
       <Modal
@@ -54,6 +55,7 @@ export default function CustomModal({ isSubmit, onClose, isOpen, children, butto
                 type={`${isSubmit ? 'submit' : 'button'}`}
                 variant="contained"
                 color="primary"
+                disabled={disabled}
                 onClick={buttonClick}
               >
                 {buttonText}

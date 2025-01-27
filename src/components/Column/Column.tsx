@@ -64,7 +64,7 @@ function Column({ name: startName = '', size: startSize = 0, id }: ColumnProps) 
           <Button disabled={isCreating} onClick={handleCreateTask} sx={addTaskStyle}>
             <AddIcon sx={{ fontSize: '2em', mt: 1 }} />
           </Button>
-          <CustomModal isOpen={showDetailModal} onClose={handleCloseModal} isSubmit buttonText="Save name">
+          <CustomModal isOpen={showDetailModal} onClose={handleCloseModal} hideButton>
             <EditColumnForm name={name} id={id} size={size} refetch={handleRefetch} close={handleCloseModal} />
           </CustomModal>
         </ColumnStyle>

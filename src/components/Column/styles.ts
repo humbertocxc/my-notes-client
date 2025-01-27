@@ -46,3 +46,11 @@ export const editColumnHeader: SxProps = {
   pb: 3 
 }
 
+export const editColumnForm: SxProps = {
+  p: 1.5,
+  width: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center' 
+}
+

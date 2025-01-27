@@ -53,6 +53,11 @@ function Card({ title: cardTitle, status, id, position, refetch }: CardProps) {
     handleUpdateTask(data)
   }
 
+  const updateStatus = () => {
+    const status = watch('status')
+    handleUpdateTask({ status })
+  }
+
   return (
     <Draggable draggableId={id} index={position}>
       {(provided) => (
@@ -66,6 +71,7 @@ function Card({ title: cardTitle, status, id, position, refetch }: CardProps) {
             <Checkbox
               disabled={isChanging}
               {...register("status")}
+              onChange={updateStatus}
             />
             <CleanInput
               disabled={isChanging}
