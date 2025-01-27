@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@mui/material"
-import { AddCircle } from "@mui/icons-material";
+import AddIcon from '@mui/icons-material/Add';
 import { Droppable } from "@hello-pangea/dnd";
 import { useMutation, useQuery } from "@apollo/client";
 import Card from "../Card/Card"
@@ -59,9 +59,9 @@ function Column({ name: startName = '', size: startSize = 0, id }: ColumnProps) 
           )}
           {provided.placeholder}
           <Button onClick={handleCreateTask} sx={addTaskStyle}>
-            <AddCircle sx={{ fontSize: '2em', mt: 1 }} />
+            <AddIcon sx={{ fontSize: '2em', mt: 1 }} />
           </Button>
-          <CustomModal isOpen={showDetailModal} onClose={handleCloseModal}>
+          <CustomModal isOpen={showDetailModal} onClose={handleCloseModal} isSubmit buttonText="Save name">
             <EditColumnForm name={name} id={id} size={size} refetch={handleRefetch} close={handleCloseModal} />
           </CustomModal>
         </ColumnStyle>

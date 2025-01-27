@@ -9,6 +9,7 @@ import { boardStyle } from './styles';
 import { useState } from 'react';
 import { Loading } from './Loading';
 import client from '../../../lib/client';
+import { CreateColumn } from './CreateColumn';
 
 
 function Board() {
@@ -29,13 +30,15 @@ function Board() {
       (item) => item?.id === result.draggableId
     )?.position;
 
+    if (startPosition === result.destination.index
+      && result.destination.droppableId === result.source.droppableId
+    ) return
+
     const moveData: IMoveTask = {
       id: result.draggableId,
       destinationId: result.destination.droppableId,
       position: result.destination.index
     }
-
-    if (startPosition === moveData.position && moveData.destinationId === result.source.droppableId) return
 
     const handleError = () => setMovingTask(false)
 
@@ -56,6 +59,7 @@ function Board() {
               id={column.id}
             />
           ))}
+          <CreateColumn />
         </Stack>
       </DragDropContext>
       <Loading loading={movingTask} />

@@ -3,8 +3,12 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import { ReactNode } from 'react';
+import { Button, SxProps } from '@mui/material';
 
-const style = {
+const style: SxProps = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
   position: 'absolute',
   top: '50%',
   left: '50%',
@@ -17,12 +21,16 @@ const style = {
 };
 
 interface ITransitionModal {
-  onClose: () => void
+  onClose: VoidFunction
   isOpen: boolean
   children: ReactNode
+  buttonClick?: VoidFunction
+  buttonText?: string
+  isSubmit?: boolean
+  hideButton?: boolean
 }
 
-export default function CustomModal({ onClose, isOpen, children }: ITransitionModal) {
+export default function CustomModal({ isSubmit, onClose, isOpen, children, buttonText, buttonClick, hideButton }: ITransitionModal) {
   return (
     <div>
       <Modal
@@ -41,6 +49,16 @@ export default function CustomModal({ onClose, isOpen, children }: ITransitionMo
         <Fade in={isOpen}>
           <Box sx={style}>
             {children}
+            {!hideButton &&
+              <Button
+                type={`${isSubmit ? 'submit' : 'button'}`}
+                variant="contained"
+                color="primary"
+                onClick={buttonClick}
+              >
+                {buttonText}
+              </Button>
+            }
           </Box>
         </Fade>
       </Modal>
