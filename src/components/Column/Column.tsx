@@ -24,6 +24,7 @@ interface ColumnProps {
 function Column({ name: startName = '', size: startSize = 0, id }: ColumnProps) {
   const { data, refetch, error, loading } = useQuery<IColumnDetails>(columnDetailsQuery, { variables: { id } })
   const [createTask] = useMutation<ICreateTask>(createTaskMutation)
+  const [isCreating, setIsCreating] = useState(false)
 
   const { size } = data?.columnById || { size: startSize }
   const { name } = data?.columnById || { name: startName }
@@ -35,8 +36,10 @@ function Column({ name: startName = '', size: startSize = 0, id }: ColumnProps) 
 
 
   const handleCreateTask = async () => {
+    setIsCreating(true)
     await createTask({ variables: { title: 'New task', columnId: id } })
     refetch()
+    setIsCreating(false)
   }
 
   const handleRefetch = () => refetch()
@@ -58,7 +61,7 @@ function Column({ name: startName = '', size: startSize = 0, id }: ColumnProps) 
             <Card key={task.id} {...task} status={task.status} refetch={handleRefetch} />
           )}
           {provided.placeholder}
-          <Button onClick={handleCreateTask} sx={addTaskStyle}>
+          <Button disabled={isCreating} onClick={handleCreateTask} sx={addTaskStyle}>
             <AddIcon sx={{ fontSize: '2em', mt: 1 }} />
           </Button>
           <CustomModal isOpen={showDetailModal} onClose={handleCloseModal} isSubmit buttonText="Save name">
