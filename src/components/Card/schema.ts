@@ -1,8 +1,7 @@
 import { z } from "zod";
 
 const schema = z.object({
-  title: z.string().min(1, "Title is required").optional(),
-  status: z.boolean().optional(),
+  title: z.string().min(1, "Title is required")
 });
 
 export default schema

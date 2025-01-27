@@ -1,7 +1,7 @@
 import { SxProps } from "@mui/material"
 
 export const listStyle: SxProps = {
-  minWidth: '320px',
+  minWidth: { xs: '100%', sm: '320px' },
   maxWidth: '320px',
   minHeight: '79vh',
   maxHeight: '79vh',

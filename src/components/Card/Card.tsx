@@ -1,4 +1,4 @@
-import { Box, Button, Checkbox } from "@mui/material"
+import { Box, Button, Checkbox, Tooltip } from "@mui/material"
 import { Delete } from "@mui/icons-material";
 import { useMutation } from "@apollo/client";
 import { Draggable } from "@hello-pangea/dnd";
@@ -29,13 +29,9 @@ function Card({ title: cardTitle, status, id, position, refetch }: CardProps) {
     defaultValues: { title: cardTitle, status: status === 'done' },
   })
 
-  const handleUpdateTask = async ({ title, status }: FormData) => {
+  const handleUpdateTask = async ({ title }: FormData) => {
     setIsChanging(true)
-    const newData = {
-      id,
-      title,
-      status: status ? 'done' : 'todo',
-    }
+    const newData = { id, title }
     await changeStatus({ variables: newData })
 
     refetch()
@@ -53,9 +49,13 @@ function Card({ title: cardTitle, status, id, position, refetch }: CardProps) {
     handleUpdateTask(data)
   }
 
-  const updateStatus = () => {
-    const status = watch('status')
-    handleUpdateTask({ status })
+  const updateStatus = async () => {
+    setIsChanging(true)
+
+    const data = { id, status: status === 'done' ? 'todo' : 'done' }
+    await changeStatus({ variables: data })
+
+    setIsChanging(false)
   }
 
   return (
@@ -67,22 +67,24 @@ function Card({ title: cardTitle, status, id, position, refetch }: CardProps) {
           {...provided.dragHandleProps}
           sx={cardStyles}
         >
-            <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ display: 'flex', alignItems: 'center' }}>
             <Checkbox
               disabled={isChanging}
-              {...register("status")}
+              checked={status === 'done'}
               onChange={updateStatus}
             />
-            <CleanInput
-              disabled={isChanging}
-              variant="standard"
-              sx={{ borderBottom: `${watch("title") === cardTitle ? "none" : "solid 1px"}` }}
-              {...register("title")}
-              error={!!errors.title}
-              helperText={errors.title ? errors.title.message : ""}
-            />
+            <Tooltip title={watch('title')}>
+              <CleanInput
+                disabled={isChanging}
+                variant="standard"
+                sx={{ borderBottom: `${watch("title") === cardTitle ? "none" : "solid 1px"}` }}
+                {...register("title")}
+                error={!!errors.title}
+                helperText={errors.title ? errors.title.message : ""}
+              />
+            </Tooltip>
             <button hidden type="submit" />
-            </Box>
+          </Box>
           <Button disabled={isChanging} onClick={handleDeleteTask}>
             <Delete />
           </Button>

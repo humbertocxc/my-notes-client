@@ -61,7 +61,7 @@ export const EditColumnForm = ({ id, name, size, refetch, close }: IEditColumnPr
         </Typography>
         <Tooltip title="Delete group">
           <Button disabled={isChanging} type="button" onClick={handleShowDeleteAlert}>
-            <DeleteForever color="error" />
+            <DeleteForever color="primary" sx={{ fontSize: 30 }} />
           </Button>
         </Tooltip>
       </Box>
